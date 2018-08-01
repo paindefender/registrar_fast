@@ -34,9 +34,29 @@ function addCourseToShopingCart(instanceid, action) {
 		failure: function(response, request) { console.log(response)} 
 	}); 
 } 
-````
+```
+Modified version of the function, to add multiple instances to the selected list.
+```js
+function addInstances(instances) {  
+  if (instances.length < 1) return;
+  instanceid = instances.shift();
+  Ext.Ajax.request({ 
+    url: '/my-registrar/course-registration/json', 
+    method: "GET", 
+    params:{ method: 'shoppingCartAddRemove',
+    instanceid:instanceid, action: 1},
+    success: function(response, request) {
+      addInstances(instances)
+    }, 
+    failure: function(response, request) {
+      console.log(response)
+    }
+  }); 
+}
+```
 
 ## Get Instance Info
+This function can be called on the [selected courses page][selected], it shows info about the courses in your selected list.
 ```js
 function getInfo(instanceid)
 {   
@@ -294,3 +314,4 @@ https://registrar.nu.edu.kz/my-registrar/course-registration/json?method=registe
 
 [courselist]: https://registrar.nu.edu.kz/my-registrar/course-registration/json?method=getCourseList
 [calcgpa]: https://registrar.nu.edu.kz/my-registrar/calcgpa
+[selected]: https://registrar.nu.edu.kz/my-registrar/course-registration/selected
